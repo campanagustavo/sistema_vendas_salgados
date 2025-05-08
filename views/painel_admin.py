@@ -1,0 +1,2 @@
+class PainelAdmin:
+    pass

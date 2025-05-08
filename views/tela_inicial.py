@@ -1,0 +1,2 @@
+class TelaInicial:
+    pass

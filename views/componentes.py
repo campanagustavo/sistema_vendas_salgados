@@ -1,0 +1,2 @@
+class Componentes:
+    pass
