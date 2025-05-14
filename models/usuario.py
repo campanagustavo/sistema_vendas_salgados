@@ -1,5 +1,15 @@
 # Classe abstrata Usuario
 # Será herdada por Cliente e Admin
 
-class Usuario:
-    pass
+from abc import ABC, abstractmethod
+
+class Usuario(ABC):
+    def __init__(self, nome: str, email: str, senha: str) -> None:
+        self.nome = nome
+        self.email = email
+        self.senha = senha
+
+    @abstractmethod
+    def get_tipo(self) -> str:
+        pass
+    
