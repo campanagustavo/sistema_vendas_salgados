@@ -3,8 +3,8 @@
 from models.alimento import Alimento
 
 class Bolo(Alimento):
-    def __init__(self, nome: str, sabor: str, tamanho: str, preco: float, descricao: str, foto: str = "") -> None:
-        super().__init__(nome, preco, descricao, foto)  # Chamando o construtor da classe base
+    def __init__(self, sabor: str, tamanho: str, preco: float, descricao: str, foto: str = "") -> None:
+        super().__init__(preco, descricao, foto)  # Chamando o construtor da classe base
         self.sabor = sabor
         self.tamanho = tamanho
 
@@ -20,4 +20,4 @@ class Bolo(Alimento):
         Exibe as informações completas do bolo.
         :return: Informações formatadas do bolo
         """
-        return f"Bolo {self.nome} - Sabor: {self.sabor}, Tamanho: {self.tamanho}, Descrição: {self.descricao}, Preço: R${self.preco}, Foto: {self.foto}"
+        return f"Sabor: {self.sabor}, Tamanho: {self.tamanho}, Descrição: {self.descricao}, Preço: R${self.preco}, Foto: {self.foto}"

@@ -103,3 +103,51 @@ def limpar_tabela_clientes():
         # Fechar a conexão com o banco de dados
         conn.close()
 
+def buscar_dado(tabela, condicao, valores=None):
+    # Criar a conexão
+    conn = conectar()
+    cursor = conn.cursor()
+
+    # Gerar a consulta SQL para seleção
+    sql = f"SELECT * FROM {tabela} WHERE {condicao}"
+
+    # Se valores forem fornecidos, substituímos os placeholders
+    if valores:
+        cursor.execute(sql, valores)
+    else:
+        cursor.execute(sql)
+
+    resultados = cursor.fetchall()
+
+    print(f"Resultado(s) buscado(s) de '{tabela}' onde {condicao}: {resultados}")
+
+    # Fechar conexão
+    conn.close()
+
+    return resultados
+
+def atualizar_dados(tabela: str, dados: dict, condicao: str, params_condicao: list):
+    conn = conectar()
+    cursor = conn.cursor()
+
+    campos = ", ".join([f"{chave} = ?" for chave in dados.keys()])
+    valores = list(dados.values())
+
+    sql = f"UPDATE {tabela} SET {campos} WHERE {condicao}"
+    cursor.execute(sql, valores + params_condicao)
+    conn.commit()
+    conn.close()
+
+def _update_todos_os_campos(self, tabela, dados: dict, condicao: str):
+    """
+    Gera e executa um único UPDATE com múltiplos campos.
+    """
+    set_clause = ", ".join([f"{campo} = '{valor}'" for campo, valor in dados.items()])
+    query = f"UPDATE {tabela} SET {set_clause} WHERE {condicao};"
+    print(f"Executando query: {query}")
+
+    conn = conectar()  # Usa sua função
+    cursor = conn.cursor()
+    cursor.execute(query)
+    conn.commit()
+    conn.close()
