@@ -1,83 +1,60 @@
-# Simulação de banco de dados
-import sqlite3
 import os
+import sqlite3
+import pandas as pd
 
-DB_FILENAME = "banco_dados.db"
-class BasedeDados:
-    def __init__(self):
-        self.db_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), DB_FILENAME)
-        self.conn = None  # A conexão será estabelecida quando necessário
+class BaseDeDados:
+    def __init__(self, db_filename='sistema_geral.db'):
+        # Caminho absoluto do banco, baseado no local do arquivo
+        self.db_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), db_filename)
+        self.conn = None  # Lazy connection
+        self.cursor = None
 
     def conectar(self):
         if self.conn is None:
-            try:
-                self.conn = sqlite3.connect(self.db_path)
-            except sqlite3.Error as e:
-                print(f"Erro ao conectar ao banco de dados: {e}")
+            self.conn = sqlite3.connect(self.db_path, check_same_thread=False)
+            self.cursor = self.conn.cursor()
+        return self.conn
 
-    def criar_tabelas(self):
-        self.conectar()  # Garante que há uma conexão
-        if not self.conn:
-            print("Não foi possível criar tabelas: sem conexão com o banco.")
-            return
+    def salvar_dado(self, tabela, dados):
+        self.conectar()
+        self.cursor.execute(f"PRAGMA table_info({tabela})")
+        colunas = [info[1] for info in self.cursor.fetchall()]
+        if 'id' in colunas:
+            colunas.remove('id')
+        if len(colunas) != len(dados):
+            raise ValueError(f"Número de colunas ({len(colunas)}) diferente dos dados ({len(dados)})")
+        placeholders = ', '.join(['?'] * len(dados))
+        sql = f"INSERT INTO {tabela} ({', '.join(colunas)}) VALUES ({placeholders})"
+        self.cursor.execute(sql, tuple(dados))
+        self.conn.commit()
 
-        sql_queries = [
-            """
-            CREATE TABLE IF NOT EXISTS usuarios (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                nome TEXT NOT NULL,
-                email TEXT UNIQUE NOT NULL,
-                senha TEXT NOT NULL, -- Lembre-se de armazenar senhas hasheadas!
-                tipo_usuario TEXT NOT NULL CHECK(tipo_usuario IN ('cliente', 'admin')),
+    def atualizar_dado(self, tabela, campo, valor, condicao):
+        self.conectar()
+        sql = f"UPDATE {tabela} SET {campo} = ? WHERE {condicao}"
+        self.cursor.execute(sql, (valor,))
+        self.conn.commit()
 
-            );
-            """,
-            """
-            CREATE TABLE IF NOT EXISTS alimentos (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                nome TEXT NOT NULL,
-                descricao TEXT,
-                preco REAL NOT NULL,
-                tipo_alimento TEXT NOT NULL CHECK(tipo_alimento IN ('bolo', 'salgado')),
-                ingredientes TEXT,
-                tamanho TEXT,      -- Específico para bolo
-                recheio TEXT,      -- Específico para bolo
-                cobertura TEXT,    -- Específico para bolo
-                tipo_massa TEXT,   -- Específico para salgado
-                disponivel INTEGER DEFAULT 1, -- 1 para true, 0 para false
-                imagem_path TEXT   -- Caminho para a imagem do alimento
-            );
-            """,
-            """
-            CREATE TABLE IF NOT EXISTS pedidos (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                cliente_id INTEGER NOT NULL,
-                data_pedido TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                status_pedido TEXT NOT NULL DEFAULT 'pendente'
-                                CHECK(status_pedido IN ('pendente', 'em_preparo', 'pronto_entrega', 'entregue', 'cancelado')),
-                valor_total REAL NOT NULL,
-        
-                FOREIGN KEY (cliente_id) REFERENCES usuarios (id) ON DELETE CASCADE
-            );
-            """,
-            """
-            CREATE TABLE IF NOT EXISTS itens_pedido (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                pedido_id INTEGER NOT NULL,
-                alimento_id INTEGER NOT NULL,
-                quantidade INTEGER NOT NULL,
-                preco_unitario REAL NOT NULL, -- Preço no momento da compra
-                total REAL NOT NULL,       -- Calculado: quantidade * preco_unitario
-                FOREIGN KEY (pedido_id) REFERENCES pedidos (id) ON DELETE CASCADE,
-                FOREIGN KEY (alimento_id) REFERENCES alimentos (id) ON DELETE RESTRICT
-            );
-            """
-        ]
+    def deletar_dado(self, tabela, condicao):
+        self.conectar()
+        sql = f"DELETE FROM {tabela} WHERE {condicao}"
+        self.cursor.execute(sql)
+        self.conn.commit()
+
+    def listar_dados(self, tabela):
+        self.conectar()
+        df = pd.read_sql_query(f"SELECT * FROM {tabela}", self.conn)
+        return df
+
+    def limpar_tabela(self, tabela):
         try:
-            cursor = self.conn.cursor()
-            for query in sql_queries:
-                cursor.execute(query)
+            self.conectar()
+            self.cursor.execute(f"DELETE FROM {tabela}")
             self.conn.commit()
-            print(f"Tabelas do banco '{DB_FILENAME}' verificadas/criadas em '{self.db_path}'.")
         except sqlite3.Error as e:
-            print(f"Erro ao criar tabelas: {e}")
+            print(f"Erro ao limpar tabela '{tabela}': {e}")
+
+    def fechar_conexao(self):
+        if self.conn:
+            self.conn.close()
+            self.conn = None
+            self.cursor = None
