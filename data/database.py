@@ -58,3 +58,5 @@ class BaseDeDados:
             self.conn.close()
             self.conn = None
             self.cursor = None
+
+    
