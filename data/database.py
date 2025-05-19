@@ -52,6 +52,14 @@ class BaseDeDados:
         resultado = self.cursor.fetchall()
         return resultado
     
+    def atualizar_dados(self, tabela: str, dados: dict, condicao: str, params_condicao: list):
+        self.conectar()
+        campos = ", ".join([f"{chave} = ?" for chave in dados.keys()])
+        valores = list(dados.values())
+        sql = f"UPDATE {tabela} SET {campos} WHERE {condicao}"
+        self.cursor.execute(sql, valores + params_condicao)
+        self.conn.commit()
+    
     def limpar_tabela(self, tabela):
         try:
             self.conectar()
