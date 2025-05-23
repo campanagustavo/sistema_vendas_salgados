@@ -1,0 +1,60 @@
+
+\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+\renewcommand\abstractname{Resumo}
+
+\begin{document}
+
+\title{Sistema de Gerenciamento de Vendas de Bolos e Salgados}
+
+\author{\IEEEauthorblockN{Cauê Rodrigues Campos, Gustavo Campana Cruz do Vale, Marcus Vinícius da Cruz Maia}
+\IEEEauthorblockA{\textit{Análise, Projeto e Programação Orientados a Objetos} \\
+\textit{Universidade Federal de Minas Gerais (UFMG)}\\
+Minas Gerais, Brasil, maio/2025}
+}
+
+\maketitle
+
+\begin{abstract}
+Este trabalho apresenta a estrutura parcial do projeto "Sistema de Gerenciamento de Vendas de Bolos e Salgados", desenvolvido no contexto da disciplina de Análise, Projeto e Programação Orientados a Objetos (APPOO). O sistema aplica os principais conceitos da Programação Orientada a Objetos com foco em modularização, herança e encapsulamento, utilizando Python, Flet e SQLite.
+\end{abstract}
+
+\begin{IEEEkeywords}
+POO, SQLite, Python, Flet, UML, vendas
+\end{IEEEkeywords}
+
+\section{Introdução e Revisão}
+O projeto visa implementar um sistema para gerenciamento de vendas de alimentos (bolos e salgados), com cadastro de produtos, usuários e pedidos. A motivação está na aplicabilidade real do domínio e na oportunidade de praticar os princípios fundamentais da POO. A revisão bibliográfica apoia-se nos conceitos de encapsulamento, herança, polimorfismo, modularização e estrutura MVC para construção de sistemas robustos e escaláveis.
+
+\section{Metodologia}
+A abordagem adotada organiza o sistema em camadas:
+\begin{itemize}
+    \item \textbf{models/} - define as entidades do sistema (Usuario, Cliente, Admin, Alimento, Bolo, Salgado, Pedido).
+    \item \textbf{controllers/} - lida com lógica de negócio, como login, criação de pedidos e cadastro de alimentos.
+    \item \textbf{views/} - interface gráfica construída com o framework Flet.
+    \item \textbf{data/} - manipulação do banco de dados SQLite.
+\end{itemize}
+Além disso, utilizou-se o padrão de acesso a dados por meio da classe \texttt{BaseDados}.
+
+\section{Resultados}
+Foram desenvolvidos:
+\begin{itemize}
+    \item Diagrama UML com todas as classes, métodos, atributos e heranças.
+    \item Interface gráfica funcional com tela de login e painel de cliente/admin.
+    \item Estrutura modular de pastas e arquivos com versionamento no GitHub.
+\end{itemize}
+
+\section{Conclusão}
+
+
+\section {Referências}
+
+\end{document}
