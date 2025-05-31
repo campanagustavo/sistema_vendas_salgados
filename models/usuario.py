@@ -1,34 +1,56 @@
 from abc import ABC, abstractmethod
+import hashlib
 
 class Usuario(ABC):
     def __init__(self, nome: str, email: str, senha: str, id: int = None) -> None:
         self.id = id
-        self.nome = nome
-        self.email = email
-        self.senha = senha
+        self._nome = nome
+        self._email = email
+        self.__senha = self._hash_senha(senha)
     
+    @property
+    def nome(self) -> str:
+        return self._nome
+
+    @nome.setter
+    def nome(self, novo_nome: str) -> None:
+        self._nome = novo_nome
+
+    @property
+    def email(self) -> str:
+        return self._email
+
+    @email.setter
+    def email(self, novo_email: str) -> None:
+        self._email = novo_email
+
+    @property
+    def senha(self) -> str:
+        raise AttributeError("Senha não pode ser acessada diretamente.")
+
+    @senha.setter
+    def senha(self, nova_senha: str) -> None:
+        self.__senha = self._hash_senha(nova_senha)
+
+    def _hash_senha(self, senha: str) -> str:
+        return hashlib.sha256(senha.encode()).hexdigest()
+
     @abstractmethod
     def get_tipo(self) -> str:
-        # Método abstrato: cada subclasse deve retornar o tipo do usuário (ex: 'cliente', 'admin')
         pass
 
     @abstractmethod
     def tabela(self) -> str:
-        # Método abstrato: cada subclasse deve retornar o nome da tabela no banco de dados
         pass
-    
+
     def campos_validos(self) -> bool:
-        # Verifica se nome, email e senha foram preenchidos
-        return all([self.nome, self.email, self.senha])
+        return all([self._nome, self._email, self.__senha])
 
     def validar_credenciais(self, email: str, senha: str) -> bool:
-        # Confere se o email e senha recebidos conferem com os do objeto
-        return self.email == email and self.senha == senha
-    
+        return self._email == email and self.__senha == self._hash_senha(senha)
+
     def dados_para_salvar(self) -> list:
-        # Retorna os dados para salvar no banco de dados
-        return [self.nome, self.email, self.senha]
-    
+        return [self._nome, self._email, self.__senha]
+
     def dados_chave(self) -> tuple[str, tuple]:
-        # Retorna a condição WHERE e seus parâmetros para buscar usuário único
-        return "email = ?", (self.email,)
+        return "email = ?", (self._email,)

@@ -6,23 +6,21 @@ class Pedido:
         self.cliente_id = cliente_id
         self.itens = itens
         self.metodo_pagamento = metodo_pagamento
-        self.status = status if status in self.STATUS_VALIDOS else "Confirmado"
-        self.total = self.calcular_total()
+        self.status = status  # Usa o setter, que valida!
 
-    def atualizar_status(self, novo_status: str) -> bool:
-        # Atualiza o status do pedido, retornando True se válido, False caso contrário
+    @property
+    def status(self) -> str:
+        return self._status
+
+    @status.setter
+    def status(self, novo_status: str) -> None:
         if novo_status not in self.STATUS_VALIDOS:
-            return False
-        self.status = novo_status
-        return True
-    
+            raise ValueError(f"Status inválido: {novo_status}. Status válidos: {self.STATUS_VALIDOS}")
+        self._status = novo_status
+
     def pode_cancelar(self) -> bool:
-        # Retorna True se o pedido estiver em um status que permite cancelamento
-        return self.status in ["Confirmado", "Em preparo"]
+        return self._status in ["Confirmado", "Em preparo"]
     
-    def calcular_total(self) -> float:
-        # Calcula o total do pedido com base nos itens
-        total = 0.0
-        for item in self.itens:
-            total += item['preco'] * item['quantidade']
-        return total
+    @property
+    def total(self) -> float:
+        return sum(item['preco'] * item['quantidade'] for item in self.itens)
