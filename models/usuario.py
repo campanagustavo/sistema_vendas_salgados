@@ -36,7 +36,7 @@ class Usuario(ABC):
         return hashlib.sha256(senha.encode()).hexdigest()
 
     @abstractmethod
-    def get_tipo(self) -> str:
+    def tipo(self) -> str:
         pass
 
     @abstractmethod

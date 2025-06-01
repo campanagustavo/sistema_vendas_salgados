@@ -59,10 +59,10 @@ class TelaLogin:
             self.page.update()
             return
 
-        print(f"Bem-vindo {usuario.nome} ({usuario.get_tipo()})")
+        print(f"Bem-vindo {usuario.nome} ({usuario.tipo})")
 
         # Autenticação bem-sucedida
-        if usuario.get_tipo() == "admin":
+        if usuario.tipo == "admin":
             self.page.clean()
             PainelAdmin(self.page)
         else:
