@@ -10,7 +10,7 @@ class CadastroControle:
 
     def cadastrar_cliente(self, usuario: Usuario) -> str | None:
         # Verifica se os campos do usuário estão preenchidos corretamente
-        if not usuario.campos_validos():
+        if not usuario.campos_validos:
             return "Todos os campos devem ser preenchidos."
         
         # Obtém a condição e os valores para a busca (exemplo: "email = ?")
@@ -22,7 +22,7 @@ class CadastroControle:
 
         try:
             # Tenta salvar os dados do novo cliente no banco
-            self.db.salvar_dado(usuario.tabela(), usuario.dados_para_salvar())
+            self.db.salvar_dado(usuario.tabela, usuario.dados_para_salvar())
             return None  # Cadastro realizado com sucesso
         except Exception as e:
             # Caso ocorra erro, imprime no console e retorna mensagem
@@ -50,10 +50,10 @@ class CadastroControle:
             resultado = self.db.buscar_dado("clientes", "email = ?", (email,))
             cliente_data = resultado[0]
             # Cria objeto Cliente com dados retornados
-            cliente = Cliente(nome=cliente_data[1], email=cliente_data[2], senha=cliente_data[3])
+            cliente = Cliente(nome=cliente_data[1], email=cliente_data[2], senha=cliente_data[3], senha_ja_hasheada=True)
 
             # Converte Cliente para Admin
-            admin = cliente.virar_admin()
+            admin = cliente.virar_admin
             # Salva novo admin e remove cliente da tabela clientes
             self.db.salvar_dado("admins", admin.dados_para_salvar())
             self.db.deletar_dado("clientes", "email = ?", (email,))

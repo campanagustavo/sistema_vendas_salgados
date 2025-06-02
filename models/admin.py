@@ -1,8 +1,8 @@
 from models.usuario import Usuario
 
 class Admin(Usuario):
-    def __init__(self, nome: str, email: str, senha: str, id: int = None) -> None:
-        super().__init__(nome, email, senha, id)
+    def __init__(self, nome: str, email: str, senha: str, id: int = None, senha_ja_hasheada = False) -> None:
+        super().__init__(nome, email, senha, id,senha_ja_hasheada = senha_ja_hasheada)
     
     @property
     def tipo(self) -> str:

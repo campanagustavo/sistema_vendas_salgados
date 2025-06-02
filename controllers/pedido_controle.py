@@ -85,7 +85,10 @@ class PedidoControle:
         if not pedido:
             return False
         
-        if not pedido.atualizar_status(novo_status):
+        try:
+            pedido.status = novo_status  # Isso já valida e pode lançar ValueError
+        except ValueError as e:
+            print(f"Erro ao atualizar status do pedido: {e}")
             return False
 
         # Atualiza no banco de dados

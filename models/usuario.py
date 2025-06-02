@@ -2,11 +2,15 @@ from abc import ABC, abstractmethod
 import hashlib
 
 class Usuario(ABC):
-    def __init__(self, nome: str, email: str, senha: str, id: int = None) -> None:
+    def __init__(self, nome: str, email: str, senha: str, id: int = None,senha_ja_hasheada: bool = False) -> None:
         self.id = id
         self._nome = nome
         self._email = email
-        self.__senha = self._hash_senha(senha)
+        if senha_ja_hasheada:
+            self.__senha = senha  # não re-hash
+        else:
+            self.__senha = self._hash_senha(senha)
+
     
     @property
     def nome(self) -> str:
@@ -34,6 +38,10 @@ class Usuario(ABC):
 
     def _hash_senha(self, senha: str) -> str:
         return hashlib.sha256(senha.encode()).hexdigest()
+    
+    @property
+    def senha_hash(self) -> str: ## necessário para tornar alguém admin
+        return self.__senha
 
     @abstractmethod
     def tipo(self) -> str:

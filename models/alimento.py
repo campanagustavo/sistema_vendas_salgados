@@ -10,7 +10,7 @@ class Alimento(ABC):
 
     @property
     @abstractmethod
-    def get_categoria(self) -> str:
+    def categoria(self) -> str:
         # Método abstrato: cada subclasse deve informar sua categoria (ex: 'Bolo')
         pass
     

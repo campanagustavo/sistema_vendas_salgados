@@ -10,20 +10,20 @@ class AlimentoControle:
 
     def adicionar_alimento(self, alimento: Alimento) -> str | None:
         # Obtém condição para busca no banco, para evitar duplicidade
-        condicao, valores = alimento.dados_chave()
-        resultados = self.db.buscar_dado(alimento.tabela(), condicao, valores)
+        condicao, valores = alimento.dados_chave
+        resultados = self.db.buscar_dado(alimento.tabela, condicao, valores)
 
         # Se já existir alimento com mesma chave, retorna aviso
         if resultados:
-            return f"{alimento.get_categoria()} já adicionado."
+            return f"{alimento.get_categoria} já adicionado."
 
         # Verifica se os campos obrigatórios estão preenchidos
-        if not alimento.campos_validos():
+        if not alimento.campos_validos:
             return "Preencha todos os campos obrigatórios!"
 
         try:
             # Tenta salvar o novo alimento no banco
-            self.db.salvar_dado(alimento.tabela(), alimento.dados_para_salvar())
+            self.db.salvar_dado(alimento.tabela, alimento.dados_para_salvar)
             return None  # Sucesso
         except Exception as e:
             # Retorna mensagem de erro em caso de exceção
