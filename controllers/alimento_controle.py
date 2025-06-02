@@ -52,7 +52,7 @@ class AlimentoControle:
 
     def editar_alimento(self, tabela: str, alimento_antigo, alimento_novo, campos: list) -> str | None:
         # Edita um alimento existente na tabela, atualizando os campos indicados
-        if not alimento_novo.campos_validos():
+        if not alimento_novo.campos_validos:
             return "Por favor, preencha todos os campos obrigatórios!"
 
         # Condição para localizar o alimento antigo no banco pelo ID
