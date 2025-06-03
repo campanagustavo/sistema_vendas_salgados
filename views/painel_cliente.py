@@ -647,7 +647,7 @@ class PainelCliente:
         if pedido.pode_cancelar():
             acoes = ft.ElevatedButton(
                 "Cancelar",
-                on_click=lambda e, p=pedido: self.cancelar_pedido(p),
+                on_click=lambda e: (print(f"Clicou no cancelar do pedido #{pedido.id}"), self.cancelar_pedido(pedido))[1],
                 color=ft.Colors.WHITE,
                 bgcolor=ft.Colors.RED_700,
                 tooltip="Cancelar este pedido"

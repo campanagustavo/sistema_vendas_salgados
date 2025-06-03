@@ -7,22 +7,27 @@ class Bolo(Alimento):
         self.tamanho = tamanho
         self.id = id
 
-    def get_categoria(self) -> str:
+    @property
+    def categoria(self) -> str:
         # Implementação concreta do método abstrato
         return "Bolo"
 
+    @property
     def dados_chave(self) -> tuple[str, tuple]:
         # Chave única para identificar bolo no banco (ex: sabor+tamanho+preço)
         return "sabor = ? AND tamanho = ? AND preco = ?", (self.sabor, self.tamanho, self.preco)
 
+    @property
     def dados_para_salvar(self) -> list:
         # Dados que serão armazenados no banco
         return [self.sabor, self.tamanho, self.preco, self.descricao, self.foto]
 
+    @property
     def tabela(self) -> str:
         # Nome da tabela correspondente no banco
         return "bolos"
 
+    @property
     def campos_validos(self) -> bool:
         # Validação básica de campos obrigatórios
         return all([self.sabor, self.tamanho, self.preco])

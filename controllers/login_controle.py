@@ -23,7 +23,8 @@ class LoginControle:
                 id=usuario_data[0],
                 nome=usuario_data[1],
                 email=usuario_data[2],
-                senha=usuario_data[3]
+                senha=usuario_data[3],
+                senha_ja_hasheada = True
             )
 
             # Valida as credenciais informadas
