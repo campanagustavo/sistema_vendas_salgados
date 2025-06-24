@@ -58,7 +58,6 @@ class PainelCliente:
         # Dicionário para armazenar as quantidades temporárias
         self.quantidades = {produto.id: 0 for produto in self.alimento_controle.listar_alimentos(Bolo, "bolos") + self.alimento_controle.listar_alimentos(Salgado, "salgados")}
 
-        # Barra superior com botões
         barra_superior = ft.Row(
             controls=[
                 ft.ElevatedButton(
@@ -179,7 +178,6 @@ class PainelCliente:
             width=900
         )
 
-        # Container principal
         container_principal = ft.Container(
             content=ft.Column(
                 [
@@ -237,7 +235,7 @@ class PainelCliente:
         # Cria um componente de mensagem (se ainda não existir)
         if not hasattr(self, 'msg_text'):
             self.msg_text = ft.Text("", size=16)
-            # Adiciona o componente à sua interface (ajuste conforme sua estrutura)
+            # Adiciona o componente na interface
             self.page.add(self.msg_text)  # Ou adicione ao container apropriado
         
         try:
@@ -245,7 +243,6 @@ class PainelCliente:
             if not hasattr(produto, 'id') or not produto.id:
                 raise ValueError("Produto sem ID válido")
             
-            # Adiciona ao carrinho
             self.carrinho.adicionar_item(produto)
             
             # Mensagem de sucesso
@@ -265,7 +262,6 @@ class PainelCliente:
 
         self.page.clean()
         
-        # Barra superior
         barra_superior = ft.Row(
             controls=[
                 ft.ElevatedButton(
@@ -343,7 +339,6 @@ class PainelCliente:
             )
         ], spacing=10, horizontal_alignment=ft.CrossAxisAlignment.END) if itens_carrinho else None
         
-        # Conteúdo principal
         conteudo_principal = ft.Column([
             ft.Text("Meu Carrinho", size=24, weight=ft.FontWeight.BOLD),
             lista_itens if itens_carrinho else ft.Text(
@@ -367,7 +362,6 @@ class PainelCliente:
         )
 
     def remover_item_carrinho(self, item_id, tipo):
-        """Remove um item do carrinho e atualiza a tela"""
         try:
             if self.carrinho.remover_item(item_id, tipo):
                 self.mostrar_mensagem("Item removido do carrinho!")
@@ -384,7 +378,6 @@ class PainelCliente:
         """Versão centralizada da tela de pagamento"""
         print("Botão finalizar pedido clicado!")
         
-        # Verifica se há itens no carrinho
         itens = self.carrinho.listar_itens()
         if not itens:
             self.mostrar_mensagem("Seu carrinho está vazio!")
@@ -605,7 +598,6 @@ class PainelCliente:
         self.page.update()
 
     def _construir_lista_pedidos(self):
-        """Constroi a lista de pedidos"""
         from controllers.pedido_controle import PedidoControle
         pedidos = PedidoControle().listar_pedidos_por_cliente(self.cliente.id)
         pedidos.sort(key=lambda p: p.id, reverse=True)

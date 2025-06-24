@@ -43,7 +43,7 @@ class PainelAdmin:
         )
         
         controles.append(titulo_container)
-            
+                
         controles.append(
             ft.IconButton(
                 icon=ft.Icons.EXIT_TO_APP,
@@ -162,13 +162,21 @@ class PainelAdmin:
         )
 
     def salvar_bolo(self, e):
+        # preço tem que ser numero
+        try:
+            preco_valor = float(self.preco_field.value.strip().replace(',', '.'))
+        except (ValueError, TypeError):
+            self.msg_text.value = "Erro: O preço deve ser um número."
+            self.msg_text.color = ft.Colors.RED
+            self.page.update()
+            return
+            
         sabor = self.sabor_field.value.strip()
         tamanho = self.tamanho_field.value.strip()
-        preco = self.preco_field.value.strip()
         descricao = self.descricao_field.value.strip()
         foto = self.foto_field.value.strip()
 
-        bolo = Bolo(sabor, tamanho, preco, descricao, foto)
+        bolo = Bolo(sabor, tamanho, preco_valor, descricao, foto)
         erro = self.alimento_controle.adicionar_alimento(bolo)
 
         if erro:
@@ -231,14 +239,22 @@ class PainelAdmin:
         )
 
     def salvar_salgado(self, e):
+        # preço tem que ser número
+        try:
+            preco_valor = float(self.preco_field.value.strip().replace(',', '.'))
+        except (ValueError, TypeError):
+            self.msg_text.value = "Erro: O preço deve ser um número."
+            self.msg_text.color = ft.Colors.RED
+            self.page.update()
+            return
+            
         tipo = self.sabor_field.value.strip()
         recheio = self.tamanho_field.value.strip()
-        preco = self.preco_field.value.strip()
         descricao = self.descricao_field.value.strip()
         foto = self.foto_field.value.strip()
 
-        bolo = Salgado(tipo, recheio, preco, descricao, foto)
-        erro = self.alimento_controle.adicionar_alimento(bolo)
+        salgado = Salgado(tipo, recheio, preco_valor, descricao, foto)
+        erro = self.alimento_controle.adicionar_alimento(salgado)
 
         if erro:
             self.msg_text.value = erro
@@ -393,20 +409,26 @@ class PainelAdmin:
 
         self.page.views.append(editar_view)
         self.page.go("/editar_salgado")
-        self.page.update()  # <--- IMPORTANTE: atualiza a UI com os novos handlers
+        self.page.update()  #atualiza a UI com os novos handlers
 
     def salvar_edicao_salgado(self, e, salgado_antigo):
+        # preço tem que ser número
+        try:
+            preco_valor = float(self.preco_ref.current.value.strip().replace(',', '.'))
+        except (ValueError, TypeError):
+            self.mostrar_erro("Erro: O preço deve ser um número.")
+            return
+
         tipo = self.tipo_ref.current.value
         recheio = self.recheio_ref.current.value
-        preco = self.preco_ref.current.value
         descricao = self.descricao_ref.current.value
         foto = self.foto_ref.current.value
 
         print("Salvar clicado!")
-        print(f"ID Antigo: {salgado_antigo.id}, Tipo: {tipo}, Recheio: {recheio}, Preço: {preco}, Descrição: {descricao}, Foto: {foto}")
+        print(f"ID Antigo: {salgado_antigo.id}, Tipo: {tipo}, Recheio: {recheio}, Preço: {preco_valor}, Descrição: {descricao}, Foto: {foto}")
 
         # Criar o novo objeto Salgado com o ID do antigo e os novos dados
-        salgado_novo = Salgado(id=salgado_antigo.id, tipo=tipo, recheio=recheio, preco=preco, descricao=descricao, foto=foto)
+        salgado_novo = Salgado(id=salgado_antigo.id, tipo=tipo, recheio=recheio, preco=preco_valor, descricao=descricao, foto=foto)
         
         # O método editar_salgado agora deve usar o ID para encontrar o registro
         erro = self.alimento_controle.editar_alimento("salgados", salgado_antigo, salgado_novo, ["tipo", "recheio", "preco", "descricao", "foto"])
@@ -461,17 +483,23 @@ class PainelAdmin:
 
 
     def salvar_edicao_bolo(self, e, bolo_antigo):
+        # preço tem que ser numero
+        try:
+            preco_valor = float(self.preco_ref.current.value.strip().replace(',', '.'))
+        except (ValueError, TypeError):
+            self.mostrar_erro("Erro: O preço deve ser um número.")
+            return
+
         sabor = self.sabor_ref.current.value
         tamanho = self.tamanho_ref.current.value
-        preco = self.preco_ref.current.value
         descricao = self.descricao_ref.current.value
         foto = self.foto_ref.current.value
         
         print("Salvar clicado!")
-        print(f"ID Antigo: {bolo_antigo.id}, Sabor: {sabor}, Tamanho: {tamanho}, Preço: {preco}, Descrição: {descricao}, Foto: {foto}")
+        print(f"ID Antigo: {bolo_antigo.id}, Sabor: {sabor}, Tamanho: {tamanho}, Preço: {preco_valor}, Descrição: {descricao}, Foto: {foto}")
 
         # Criar o novo objeto Bolo com o ID do antigo e os novos dados
-        bolo_novo = Bolo(id=bolo_antigo.id, sabor=sabor, tamanho=tamanho, preco=preco, descricao=descricao, foto=foto)
+        bolo_novo = Bolo(id=bolo_antigo.id, sabor=sabor, tamanho=tamanho, preco=preco_valor, descricao=descricao, foto=foto)
         
         # O método editar_bolo agora deve usar o ID para encontrar o registro
         erro = self.alimento_controle.editar_alimento("bolos", bolo_antigo, bolo_novo, ["sabor", "tamanho", "preco", "descricao", "foto"]) 

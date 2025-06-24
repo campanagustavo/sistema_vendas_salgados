@@ -5,7 +5,6 @@ from models.alimento import Alimento
 
 class AlimentoControle:
     def __init__(self):
-        # Inicializa conexão com o banco de dados
         self.db = BaseDeDados()
 
     def adicionar_alimento(self, alimento: Alimento) -> str | None:
@@ -77,4 +76,4 @@ class AlimentoControle:
         for alimento in alimentos:
             if alimento.id == alimento_id:
                 return alimento
-        return None  # Retorna None se não encontrar
+        return None  

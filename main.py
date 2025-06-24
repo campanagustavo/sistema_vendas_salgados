@@ -6,9 +6,7 @@ class SistemaApp:
     def __init__(self, page: ft.Page):
         # Inicializa a aplicação com a página do Flet
         self.page = page
-        # Define o título da janela
         self.page.title = "Sistema de Vendas de Salgados"
-        # Inicia a aplicação
         self.iniciar()
 
     def iniciar(self):
@@ -16,7 +14,7 @@ class SistemaApp:
         TelaInicial(self.page)
 
 def main(page: ft.Page):
-    # Função principal que cria a instância da aplicação
+    # unção principal que cria a instância da aplicação
     SistemaApp(page)
 
 if __name__ == "__main__":

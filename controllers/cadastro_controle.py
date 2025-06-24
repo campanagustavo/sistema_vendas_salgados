@@ -9,6 +9,11 @@ class CadastroControle:
         self.db = BaseDeDados()
 
     def cadastrar_cliente(self, usuario: Usuario) -> str | None:
+        # LÓGICA SIMPLES ADICIONADA AQUI:
+        if "@" not in usuario.email or "." not in usuario.email:
+            return "Formato de e-mail inválido."
+
+        # RESTANTE DO SEU CÓDIGO ORIGINAL:
         # Verifica se os campos do usuário estão preenchidos corretamente
         if not usuario.campos_validos:
             return "Todos os campos devem ser preenchidos."

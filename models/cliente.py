@@ -7,7 +7,6 @@ class Cliente(Usuario):
     
     @property
     def tipo(self) -> str:
-        # Retorna o tipo do usuário como 'cliente'
         return "cliente"
     
     @property

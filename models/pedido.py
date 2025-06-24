@@ -6,7 +6,7 @@ class Pedido:
         self.cliente_id = cliente_id
         self.itens = itens
         self.metodo_pagamento = metodo_pagamento
-        self.status = status  # Usa o setter, que valida!
+        self.status = status  
 
     @property
     def status(self) -> str:

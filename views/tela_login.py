@@ -50,7 +50,7 @@ class TelaLogin:
         email = self.email.value
         senha = self.senha.value
 
-        # Autentica (agora recebe email e senha diretamente)
+        # Autentica 
         usuario, erro = self.login_controle.autenticar(email, senha)
 
         if erro:

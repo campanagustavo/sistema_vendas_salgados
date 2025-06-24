@@ -32,12 +32,12 @@ class TelaInicial:
         TelaLogin(self.page)  # Isso vai adicionar os componentes da tela de login
 
     def ir_para_cadastro(self, e):
-        from views.tela_cadastro import TelaCadastro  # Importa aqui para evitar importação circular
+        from views.tela_cadastro import TelaCadastro  # Importa aqui para evitar erro importação circular
         self.page.clean()
         TelaCadastro(self.page)
 
 def exibir_tela_inicial(page: ft.Page):
-    TelaInicial(page)  # Carrega a TelaInicial primeiro
+    TelaInicial(page)  
 
 if __name__ == "__main__":
     ft.app(target=exibir_tela_inicial)

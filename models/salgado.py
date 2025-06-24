@@ -9,7 +9,6 @@ class Salgado(Alimento):
 
     @property
     def categoria(self) -> str:
-        # Implementação concreta do método abstrato
         return "Salgado"
 
     @property

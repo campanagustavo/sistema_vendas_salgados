@@ -80,7 +80,7 @@ class PedidoControle:
         return pedidos
     
     def atualizar_status_pedido(self, pedido_id: int, novo_status: str) -> bool:
-        # Atualiza o status de um pedido, retorna True se sucesso
+        # Atualiza o status de um pedido
         pedido = self.buscar_pedido(pedido_id)
         if not pedido:
             return False
